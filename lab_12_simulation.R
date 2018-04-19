@@ -27,11 +27,21 @@ run_simulation = function (n_trials, n, p, cutoff) {
     ps[[i]] = model_select(dat$covariates, dat$responses, cutoff)
   }
   ps_all = Reduce(c, ps)
-  if (!length(ps_all) == 0) hist(ps_all)
+  return (ps_all)
 }
 
-for (n in c(100, 1000, 10000)) {
-  for (p in c(10, 20, 50)) {
-    run_simulation(50, n, p, 0.05)
+ps_all_each = vector(mode = "list", length = 9)
+n = c(100, 1000, 10000)
+p = c(10, 20, 50)
+ind = 1
+for (i in 1:3) {
+  for (j in 1:3) {
+    print(i)
+    print(j)
+    ps_all_each[[ind]] = run_simulation(1, n[i], p[j], 0.05)
+    ind = ind + 1
   }
 }
+
+write.table(ps_all_each, file = "myfile")
+hist("myfile")
