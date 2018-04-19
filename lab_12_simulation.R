@@ -18,3 +18,20 @@ model_select = function (covariates, responses, cutoff) {
     return (new.p_values)
   }
 }
+
+
+run_simulation = function (n_trials, n, p, cutoff) {
+  ps = vector(mode = "list", length = n_trials)
+  for (i in 1:n_trials) {
+    dat = generate_data(n, p)
+    ps[[i]] = model_select(dat$covariates, dat$responses, cutoff)
+  }
+  ps_all = Reduce(c, ps)
+  if (!length(ps_all) == 0) hist(ps_all)
+}
+
+for (n in c(100, 1000, 10000)) {
+  for (p in c(10, 20, 50)) {
+    run_simulation(50, n, p, 0.05)
+  }
+}
