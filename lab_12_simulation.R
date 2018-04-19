@@ -8,7 +8,9 @@ generate_data = function (n, p) {
 model_select = function (covariates, responses, cutoff) {
   my.lm = lm(responses ~ covariates)
   p_values = summary(my.lm)$coefficients[,4]
-  retained = covariates[,p_values <= cutoff]
+  ind = p_values <= cutoff
+  ind = ind[2:length(ind)]
+  retained = covariates[,ind]
   if (length(retained) == 0) return (vector(length = 0))
   else {
     new.lm = lm(responses ~ retained)
